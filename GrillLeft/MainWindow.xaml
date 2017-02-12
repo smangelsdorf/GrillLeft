@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <ListBox x:Name="deviceListBox" Margin="10,10,10,64"/>
     </Grid>
 </Window>
