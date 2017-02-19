@@ -50,7 +50,11 @@ namespace GrillLeft
 
         private void continueButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            var window = new MonitoringWindow();
+            window.GrillThermometer = deviceListBox.SelectedItem as GrillThermometer;
+            window.Show();
+
+            Close();
         }
     }
 }
