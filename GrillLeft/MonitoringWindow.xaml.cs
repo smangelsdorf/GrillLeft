@@ -37,14 +37,7 @@ namespace GrillLeft
             set
             {
                 grillThermometer = value;
-            }
-        }
-
-        private async void ProbeTemperatures()
-        {
-            for (;;)
-            {
-                //
+                grillThermometer.Listen();
             }
         }
     }
