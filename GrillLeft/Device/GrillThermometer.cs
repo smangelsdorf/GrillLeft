@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Windows.Devices.Bluetooth;
@@ -21,6 +22,8 @@ namespace GrillLeft.Device
         private readonly ulong Address;
         private readonly GattCharacteristic[] Characteristics;
 
+        internal ThermometerStateObservable Observable { get; private set; }
+
         public static async Task<IList<GrillThermometer>> GetAllDevices()
         {
             var selector = GattDeviceService.GetDeviceSelectorFromUuid(SERVICE_GUID);
@@ -37,6 +40,8 @@ namespace GrillLeft.Device
             this.Characteristics = service.GetAllCharacteristics()
                                           .Where(ch => ch.CharacteristicProperties.HasFlag(GattCharacteristicProperties.Indicate))
                                           .ToArray();
+
+            this.Observable = new ThermometerStateObservable();
         }
 
         private void ReceiveCharacteristicValue(GattCharacteristic sender, GattValueChangedEventArgs args)
@@ -46,11 +51,11 @@ namespace GrillLeft.Device
 
             if (sender.Uuid == CHANNEL_ONE_GUID)
             {
-                new ThermometerState(ThermometerState.ThermometerChannel.One, bytes);
+                Observable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.One, bytes));
             }
             else if (sender.Uuid == CHANNEL_TWO_GUID)
             {
-                new ThermometerState(ThermometerState.ThermometerChannel.Two, bytes);
+                Observable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.Two, bytes));
             }
         }
 

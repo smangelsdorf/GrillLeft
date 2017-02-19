@@ -14,11 +14,31 @@ namespace GrillLeft.Device
             Two
         }
 
-        private readonly ThermometerChannel Channel;
+        internal readonly ThermometerChannel Channel;
+
+        private readonly byte[] Data;
+        private readonly uint Temperature;
 
         internal ThermometerState(ThermometerChannel channel, byte[] bytes)
         {
             this.Channel = channel;
+            this.Data = bytes;
+            this.Temperature = (((uint)bytes[13]) << 8) + ((uint)bytes[12]);
+        }
+
+        internal String TemperatureString
+        {
+            get
+            {
+                if (Temperature == 0x8FFF)
+                {
+                    return "---";
+                }
+                else
+                {
+                    return String.Format("{0}", ((decimal)Temperature) / 10);
+                }
+            }
         }
     }
 }

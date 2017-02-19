@@ -20,7 +20,42 @@ namespace GrillLeft
     /// </summary>
     public partial class MonitoringWindow : Window
     {
+        private class Observer : IObserver<ThermometerState>
+        {
+            private MonitoringWindow window;
+
+            public Observer(MonitoringWindow window)
+            {
+                this.window = window;
+            }
+
+            public void OnNext(ThermometerState value)
+            {
+                switch (value.Channel)
+                {
+                    case ThermometerState.ThermometerChannel.One:
+                        window.dataLeft.ThermometerState = value;
+                        break;
+
+                    case ThermometerState.ThermometerChannel.Two:
+                        window.dataRight.ThermometerState = value;
+                        break;
+                }
+            }
+
+            public void OnError(Exception error)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnCompleted()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private GrillThermometer grillThermometer;
+        private IDisposable subscription;
 
         public MonitoringWindow()
         {
@@ -38,6 +73,7 @@ namespace GrillLeft
             {
                 grillThermometer = value;
                 grillThermometer.Listen();
+                subscription = grillThermometer.Observable.Subscribe(new Observer(this));
             }
         }
     }

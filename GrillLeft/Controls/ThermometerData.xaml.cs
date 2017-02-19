@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrillLeft.Device;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,24 @@ namespace GrillLeft
     /// </summary>
     public partial class ThermometerData : UserControl
     {
+        private ThermometerState CurrentThermometerState;
+
+        internal ThermometerState ThermometerState
+        {
+            get
+            {
+                return CurrentThermometerState;
+            }
+            set
+            {
+                CurrentThermometerState = value;
+                Dispatcher.Invoke(() =>
+                {
+                    temperatureLabel.Content = value.TemperatureString;
+                });
+            }
+        }
+
         public ThermometerData()
         {
             InitializeComponent();
