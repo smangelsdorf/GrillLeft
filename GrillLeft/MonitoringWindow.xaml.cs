@@ -1,4 +1,5 @@
-﻿using GrillLeft.Device;
+﻿using GrillLeft.Data;
+using GrillLeft.Device;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,10 +57,12 @@ namespace GrillLeft
 
         private GrillThermometer grillThermometer;
         private IDisposable subscription;
+        private ConnectionManager connectionManager;
 
         public MonitoringWindow()
         {
             InitializeComponent();
+            this.connectionManager = new ConnectionManager();
         }
 
         internal GrillThermometer GrillThermometer
