@@ -23,15 +23,19 @@ namespace GrillLeft
     {
         private class Observer : IObserver<ThermometerState>
         {
-            private MonitoringWindow window;
+            private readonly MonitoringWindow window;
+            private readonly ConnectionManager connectionManager;
 
-            public Observer(MonitoringWindow window)
+            public Observer(MonitoringWindow window, ConnectionManager connectionManager)
             {
                 this.window = window;
+                this.connectionManager = connectionManager;
             }
 
             public void OnNext(ThermometerState value)
             {
+                connectionManager.RecordReading(value);
+
                 switch (value.Channel)
                 {
                     case ThermometerState.ThermometerChannel.One:
@@ -76,7 +80,7 @@ namespace GrillLeft
             {
                 grillThermometer = value;
                 grillThermometer.Listen();
-                subscription = grillThermometer.Observable.Subscribe(new Observer(this));
+                subscription = grillThermometer.Observable.Subscribe(new Observer(this, connectionManager));
             }
         }
     }

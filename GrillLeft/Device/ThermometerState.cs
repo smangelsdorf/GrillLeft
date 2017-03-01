@@ -10,13 +10,14 @@ namespace GrillLeft.Device
     {
         internal enum ThermometerChannel
         {
-            One,
-            Two
+            One = 1,
+            Two = 2
         }
 
         internal readonly ThermometerChannel Channel;
+        internal readonly DateTime Time;
+        internal readonly byte[] Data;
 
-        private readonly byte[] Data;
         private readonly uint Temperature;
 
         internal ThermometerState(ThermometerChannel channel, byte[] bytes)
@@ -24,6 +25,7 @@ namespace GrillLeft.Device
             this.Channel = channel;
             this.Data = bytes;
             this.Temperature = (((uint)bytes[13]) << 8) + ((uint)bytes[12]);
+            this.Time = DateTime.Now;
         }
 
         internal String TemperatureString
