@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core40", "Live-Charts\Core4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live-Charts", "Live-Charts", "{5B1F3532-9E07-4D07-9189-1233E4174648}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrillLeftTests", "GrillLeftTests\GrillLeftTests.csproj", "{05B2220C-941D-41EF-9074-08724A719B8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		arm|Any CPU = arm|Any CPU
@@ -86,6 +88,16 @@ Global
 		{F261C3D7-6194-4625-9516-044081B06028}.r86|Any CPU.Build.0 = Release|Any CPU
 		{F261C3D7-6194-4625-9516-044081B06028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F261C3D7-6194-4625-9516-044081B06028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.arm|Any CPU.ActiveCfg = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.arm|Any CPU.Build.0 = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.r64|Any CPU.ActiveCfg = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.r64|Any CPU.Build.0 = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.r86|Any CPU.ActiveCfg = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.r86|Any CPU.Build.0 = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B2220C-941D-41EF-9074-08724A719B8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
