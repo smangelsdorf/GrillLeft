@@ -1,0 +1,4 @@
+[submodule "Live-Charts"]
+	path = Live-Charts
+	url = https://github.com/smangelsdorf/Live-Charts.git
+	branch = itch
