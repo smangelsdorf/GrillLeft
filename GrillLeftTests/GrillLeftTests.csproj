@@ -46,18 +46,30 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Model\AppendOnlyChartValuesTests.cs" />
     <Compile Include="Model\AveragingDateTimePointTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stub\TestSeriesView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GrillLeft\GrillLeft.csproj">
       <Project>{33D32D37-643B-4169-B3B7-5BA29A7D02AA}</Project>
       <Name>GrillLeft</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Live-Charts\Core\Core.csproj">
+      <Project>{d447642c-a85f-4ab0-96d9-c66cff91aada}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Live-Charts\WpfView\WpfView.csproj">
+      <Project>{4d253423-ae05-47f6-a59d-9162ec0bb1f2}</Project>
+      <Name>WpfView</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
