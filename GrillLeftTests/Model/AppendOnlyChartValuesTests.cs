@@ -192,5 +192,28 @@ namespace GrillLeftTests.Model
 
             Assert.AreEqual(points.Count(), list.Count);
         }
+
+        [TestMethod]
+        public void OnNextTest()
+        {
+            var values = NewCollection();
+            IObserver<TestPoint> observer = values;
+            IList list = values;
+
+            var points = RandomTestPoints(5).ToArray();
+
+            foreach (var item in points)
+            {
+                observer.OnNext(item);
+            }
+
+            Assert.AreEqual(points.Count(), list.Count);
+
+            for (var i = 0; i < points.Count(); ++i)
+            {
+                var item = (TestPoint)list[i];
+                Assert.AreEqual(item.X, points[i].X);
+            }
+        }
     }
 }

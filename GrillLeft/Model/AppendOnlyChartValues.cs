@@ -14,7 +14,7 @@ using LiveCharts.Dtos;
 
 namespace GrillLeft.Model
 {
-    internal class AppendOnlyChartValues<T> : IChartValues
+    internal class AppendOnlyChartValues<T> : IChartValues, IObserver<T>
     {
         private static readonly int INCREMENT = 2000;
 
@@ -225,6 +225,21 @@ namespace GrillLeft.Model
             {
                 Append((T)item);
             }
+        }
+
+        void IObserver<T>.OnNext(T value)
+        {
+            Append(value);
+        }
+
+        void IObserver<T>.OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IObserver<T>.OnCompleted()
+        {
+            throw new NotImplementedException();
         }
 
         event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged

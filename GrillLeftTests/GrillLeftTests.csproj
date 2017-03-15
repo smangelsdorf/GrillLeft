@@ -57,6 +57,7 @@
     <Compile Include="Model\AveragingDateTimePointTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stub\TestSeriesView.cs" />
+    <Compile Include="ViewModel\TemperatureSeriesViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GrillLeft\GrillLeft.csproj">

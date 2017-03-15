@@ -18,27 +18,48 @@ namespace GrillLeft.Device
         internal readonly DateTime Time;
         internal readonly byte[] Data;
 
-        private readonly uint Temperature;
+        private readonly uint RawTemperature;
 
         internal ThermometerState(ThermometerChannel channel, byte[] bytes)
+            : this(channel, bytes, DateTime.Now)
+        {
+        }
+
+        internal ThermometerState(ThermometerChannel channel, byte[] bytes, DateTime time)
         {
             this.Channel = channel;
             this.Data = bytes;
-            this.Temperature = (((uint)bytes[13]) << 8) + ((uint)bytes[12]);
-            this.Time = DateTime.Now;
+            this.RawTemperature = (((uint)bytes[13]) << 8) + ((uint)bytes[12]);
+            this.Time = time;
+        }
+
+        internal bool IsNullTemperature
+        {
+            get
+            {
+                return RawTemperature == 0x8FFF;
+            }
+        }
+
+        internal double TemperatureValue
+        {
+            get
+            {
+                return ((double)RawTemperature) / 10d;
+            }
         }
 
         internal String TemperatureString
         {
             get
             {
-                if (Temperature == 0x8FFF)
+                if (IsNullTemperature)
                 {
                     return "---";
                 }
                 else
                 {
-                    return String.Format("{0}", ((decimal)Temperature) / 10);
+                    return String.Format("{0}", TemperatureValue);
                 }
             }
         }
