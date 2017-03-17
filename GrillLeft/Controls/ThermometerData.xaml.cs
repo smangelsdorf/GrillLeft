@@ -1,4 +1,5 @@
 ﻿using GrillLeft.Device;
+using GrillLeft.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

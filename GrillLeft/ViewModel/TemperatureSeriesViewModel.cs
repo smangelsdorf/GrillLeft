@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
-using static GrillLeft.Device.ThermometerState;
+using static GrillLeft.Model.ThermometerState;
 
 namespace GrillLeft.ViewModel
 {
