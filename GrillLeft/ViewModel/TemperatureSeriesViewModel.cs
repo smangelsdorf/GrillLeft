@@ -18,13 +18,15 @@ namespace GrillLeft.ViewModel
 
     internal class TemperatureSeriesViewModel
     {
-        internal readonly SeriesCollection SeriesCollection;
+        private readonly SeriesCollection seriesCollection;
 
         private IDisposable Subscription;
 
-        public TemperatureSeriesViewModel()
+        internal TemperatureSeriesViewModel(Action<Action> dispatcher, Action updater)
         {
-            SeriesCollection = new SeriesCollection();
+            seriesCollection = new SeriesCollection();
+            Dispatcher = dispatcher;
+            Updater = updater;
         }
 
         internal IObservable<ThermometerState> ThermometerStateObservable
@@ -33,9 +35,36 @@ namespace GrillLeft.ViewModel
             {
                 if (Subscription != null) Subscription.Dispose();
                 Subscription = value.GroupBy(st => st.Channel)
-                    .Subscribe(new ThermometerStateObserver(SeriesCollection));
+                    .Subscribe(new ThermometerStateObserver(seriesCollection, Dispatcher, Updater));
             }
         }
+
+        public SeriesCollection SeriesCollection
+        {
+            get
+            {
+                return seriesCollection;
+            }
+        }
+
+        public Func<double, string> YFormatter
+        {
+            get
+            {
+                return (d) => String.Format("{0:0.0}", d);
+            }
+        }
+
+        public Func<double, string> XFormatter
+        {
+            get
+            {
+                return (dt) => new DateTime((long)dt).ToString("HH:mm");
+            }
+        }
+
+        internal Action<Action> Dispatcher { get; set; }
+        internal Action Updater { get; set; }
 
         private class ThermometerStateObserver : IObserver<ThermometerChannelGroupedObserver>
         {
@@ -44,30 +73,40 @@ namespace GrillLeft.ViewModel
             private readonly SeriesCollection SeriesCollection;
             private readonly IList<IDisposable> Subscriptions;
             private readonly CartesianMapper<AveragingDateTimePoint> Mapper;
+            private readonly Action<Action> Dispatcher;
+            private readonly Action Updater;
 
-            public ThermometerStateObserver(SeriesCollection seriesCollection)
+            internal ThermometerStateObserver(SeriesCollection seriesCollection, Action<Action> dispatcher, Action updater)
             {
                 SeriesCollection = seriesCollection;
                 Subscriptions = new List<IDisposable>();
                 Mapper = Mappers.Xy<AveragingDateTimePoint>()
                     .X(p => p.DateTime.Ticks).Y(p => p.Value);
+                Dispatcher = dispatcher;
+                Updater = updater;
             }
 
             void IObserver<ThermometerChannelGroupedObserver>.OnNext(IGroupedObservable<ThermometerChannel, ThermometerState> observable)
             {
-                var values = new AppendOnlyChartValues<AveragingDateTimePoint>(Mapper);
-
-                var series = new LineSeries()
+                Dispatcher.Invoke(() =>
                 {
-                    Title = $"Channel {(int)observable.Key}",
-                    Values = values,
-                    LineSmoothness = 0
-                };
+                    var values = new AppendOnlyChartValues<AveragingDateTimePoint>(Mapper);
 
-                SeriesCollection.Add(series);
+                    var series = new LineSeries()
+                    {
+                        Title = $"Channel {(int)observable.Key}",
+                        Values = values,
+                        LineSmoothness = 0,
+                        PointGeometry = null
+                    };
 
-                var subscription = AggregatePoints(observable).Subscribe(values);
-                Subscriptions.Add(subscription);
+                    SeriesCollection.Add(series);
+
+                    var subscription = AggregatePoints(observable).Subscribe(values);
+                    Subscriptions.Add(subscription);
+
+                    Updater();
+                });
             }
 
             private IObservable<AveragingDateTimePoint> AggregatePoints(IObservable<ThermometerState> observable)
@@ -90,7 +129,9 @@ namespace GrillLeft.ViewModel
                         }
                         else
                         {
-                            return Observable.Return(point);
+                            var result = Observable.Return(point);
+                            point = p;
+                            return result;
                         }
                     });
             }

@@ -81,6 +81,7 @@ namespace GrillLeft
                 grillThermometer = value;
                 grillThermometer.Listen();
                 subscription = grillThermometer.Observable.Subscribe(new Observer(this, connectionManager));
+                temperatureGraph.ViewModel.ThermometerStateObservable = grillThermometer.Observable;
             }
         }
     }

@@ -3,8 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:local="clr-namespace:GrillLeft"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+    <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+        <lvc:CartesianChart Name="chart" DisableAnimations="True" Series="{Binding SeriesCollection}">
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Temperature" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Time" LabelFormatter="{Binding XFormatter}"></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+        </lvc:CartesianChart>
+    </Grid>
 </UserControl>

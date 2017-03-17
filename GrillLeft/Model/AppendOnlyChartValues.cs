@@ -53,11 +53,6 @@ namespace GrillLeft.Model
 
         private void Append(T value)
         {
-            Append(value, false);
-        }
-
-        private void Append(T value, bool notify)
-        {
             var n = Count / INCREMENT;
             while (Storage.Count < n + 1)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrillLeft.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,17 @@ namespace GrillLeft
     /// </summary>
     public partial class TemperatureGraph : UserControl
     {
+        internal readonly TemperatureSeriesViewModel ViewModel;
+
         public TemperatureGraph()
         {
+            ViewModel = new TemperatureSeriesViewModel(
+                (a) => Dispatcher.Invoke(a),
+                () => chart.Update()
+            );
+
+            DataContext = ViewModel;
+
             InitializeComponent();
         }
     }
