@@ -144,8 +144,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Device\ThermometerStateObservable.cs" />
-    <Compile Include="Device\ThermometerState.cs" />
+    <Compile Include="Model\ThermometerStateObservable.cs" />
+    <Compile Include="Model\ThermometerState.cs" />
     <Compile Include="Model\AppendOnlyChartValues.cs" />
     <Compile Include="Model\AveragingDateTimePoint.cs" />
     <Compile Include="MonitoringWindow.xaml.cs">

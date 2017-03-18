@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GrillLeft.Device
+namespace GrillLeft.Model
 {
     internal class ThermometerStateObservable : IObservable<ThermometerState>, IDisposable
     {

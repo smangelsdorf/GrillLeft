@@ -1,5 +1,6 @@
 ﻿using GrillLeft.Data;
 using GrillLeft.Device;
+using GrillLeft.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,8 +81,8 @@ namespace GrillLeft
             {
                 grillThermometer = value;
                 grillThermometer.Listen();
-                subscription = grillThermometer.Observable.Subscribe(new Observer(this, connectionManager));
-                temperatureGraph.ViewModel.ThermometerStateObservable = grillThermometer.Observable;
+                subscription = grillThermometer.ThermometerStateObservable.Subscribe(new Observer(this, connectionManager));
+                temperatureGraph.ViewModel.ThermometerStateObservable = grillThermometer.ThermometerStateObservable;
             }
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,8 +23,9 @@ namespace GrillLeft.Device
         private readonly string Name;
         private readonly ulong Address;
         private readonly GattCharacteristic[] Characteristics;
+        private IDisposable retrySubscription;
 
-        internal ThermometerStateObservable Observable { get; private set; }
+        internal readonly ThermometerStateObservable ThermometerStateObservable;
 
         public static async Task<IList<GrillThermometer>> GetAllDevices()
         {
@@ -42,7 +44,7 @@ namespace GrillLeft.Device
                                           .Where(ch => ch.CharacteristicProperties.HasFlag(GattCharacteristicProperties.Indicate))
                                           .ToArray();
 
-            this.Observable = new ThermometerStateObservable();
+            this.ThermometerStateObservable = new ThermometerStateObservable();
         }
 
         private void ReceiveCharacteristicValue(GattCharacteristic sender, GattValueChangedEventArgs args)
@@ -52,11 +54,11 @@ namespace GrillLeft.Device
 
             if (sender.Uuid == CHANNEL_ONE_GUID)
             {
-                Observable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.One, bytes));
+                ThermometerStateObservable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.One, bytes));
             }
             else if (sender.Uuid == CHANNEL_TWO_GUID)
             {
-                Observable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.Two, bytes));
+                ThermometerStateObservable.Emit(new ThermometerState(ThermometerState.ThermometerChannel.Two, bytes));
             }
         }
 
@@ -71,7 +73,7 @@ namespace GrillLeft.Device
             return String.Join(":", parts);
         }
 
-        public async void Listen()
+        public void Listen()
         {
             foreach (var ch in Characteristics)
             {
@@ -79,12 +81,24 @@ namespace GrillLeft.Device
                 ch.ValueChanged += ReceiveCharacteristicValue;
             }
 
+            EnableIndications();
+        }
+
+        private async void EnableIndications()
+        {
+            Console.WriteLine("Enabling indications");
             var tasks = Characteristics.Select(async ch => await ch.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Indicate));
             foreach (var status in await Task.WhenAll(tasks))
             {
                 Console.WriteLine("{0}", status.HasFlag(GattCommunicationStatus.Success));
             }
             Console.WriteLine("Done");
+
+            if (retrySubscription != null) retrySubscription.Dispose();
+
+            retrySubscription = Observable.Empty<ThermometerState>().Timeout(TimeSpan.FromHours(1))
+                .Merge(ThermometerStateObservable.Timeout(TimeSpan.FromMinutes(1)))
+                .Subscribe(st => { }, e => EnableIndications());
         }
     }
 }
