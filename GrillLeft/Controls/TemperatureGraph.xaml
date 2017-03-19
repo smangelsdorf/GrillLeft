@@ -13,7 +13,7 @@
                 <lvc:Axis Title="Temperature" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Time" LabelFormatter="{Binding XFormatter}"></lvc:Axis>
+                <lvc:Axis Title="Time" LabelFormatter="{Binding XFormatter}" MinValue="{Binding MinTime}" MaxValue="{Binding MaxTime}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
     </Grid>

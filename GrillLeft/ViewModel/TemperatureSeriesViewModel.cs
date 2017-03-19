@@ -22,12 +22,16 @@ namespace GrillLeft.ViewModel
         private readonly SeriesCollection seriesCollection;
 
         private IDisposable Subscription;
+        private IDisposable ReleaseMax;
 
         internal TemperatureSeriesViewModel(Action<Action> dispatcher, Action updater)
         {
             seriesCollection = new SeriesCollection();
             Dispatcher = dispatcher;
             Updater = updater;
+
+            MinTime = DateTime.Now.Ticks;
+            MaxTime = MinTime + TimeSpan.FromHours(1).Ticks;
         }
 
         internal IObservable<ThermometerState> ThermometerStateObservable
@@ -37,6 +41,16 @@ namespace GrillLeft.ViewModel
                 if (Subscription != null) Subscription.Dispose();
                 Subscription = value.GroupBy(st => st.Channel)
                     .Subscribe(new ThermometerStateObserver(seriesCollection, Dispatcher, Updater));
+
+                ReleaseMax = value.Subscribe(t =>
+                {
+                    if (MaxTime < t.Time.Ticks)
+                    {
+                        MaxTime = double.NaN;
+                        ReleaseMax.Dispose();
+                        Console.WriteLine("Exceeded max, dropped max");
+                    }
+                });
             }
         }
 
@@ -63,6 +77,9 @@ namespace GrillLeft.ViewModel
                 return (dt) => new DateTime((long)dt).ToString("HH:mm");
             }
         }
+
+        public double MinTime { get; private set; }
+        public double MaxTime { get; private set; }
 
         internal Action<Action> Dispatcher { get; set; }
         internal Action Updater { get; set; }
