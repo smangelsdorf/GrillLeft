@@ -34,6 +34,7 @@ namespace GrillLeft.Model
         private readonly IList<Entry[]> Storage;
         private readonly IDictionary<ISeriesView, PointTracker> Trackers;
         private readonly CartesianMapper<T> Mapper;
+        private readonly IList<NotifyCollectionChangedEventHandler> CollectionChangedNotifiers;
 
         private int Count;
         private double MinX, MaxX, MinY, MaxY;
@@ -43,6 +44,7 @@ namespace GrillLeft.Model
             Mapper = mapper;
             Storage = new List<Entry[]>();
             Trackers = new Dictionary<ISeriesView, PointTracker>();
+            CollectionChangedNotifiers = new List<NotifyCollectionChangedEventHandler>();
             Count = 0;
 
             MinX = double.PositiveInfinity;
@@ -67,6 +69,9 @@ namespace GrillLeft.Model
             if (entry.ChartPoint.X > MaxX) MaxX = entry.ChartPoint.X;
             if (entry.ChartPoint.Y < MinY) MinY = entry.ChartPoint.Y;
             if (entry.ChartPoint.Y > MaxY) MaxY = entry.ChartPoint.Y;
+
+            var args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, value);
+            CollectionChangedNotifiers.ForEach(a => a.Invoke(this, args));
         }
 
         private IEnumerable<Entry> GetEntryEnumerable()
@@ -241,7 +246,7 @@ namespace GrillLeft.Model
         {
             add
             {
-                throw new NotImplementedException("Not necessary");
+                CollectionChangedNotifiers.Add(value);
             }
 
             remove

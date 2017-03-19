@@ -29,8 +29,9 @@ namespace GrillLeft.ViewModel.Tests
         public void ThermometerStateObservableTest()
         {
             var observable = new ThermometerStateObservable();
+            var updates = 0;
 
-            var viewModel = new TemperatureSeriesViewModel(a => a.Invoke(), () => { });
+            var viewModel = new TemperatureSeriesViewModel(a => a.Invoke(), () => ++updates);
             viewModel.ThermometerStateObservable = observable;
 
             var t1 = DateTime.Now.Ticks;
@@ -47,6 +48,8 @@ namespace GrillLeft.ViewModel.Tests
             {
                 observable.Emit(state);
             }
+
+            Assert.AreEqual(updates, 2);
 
             Assert.AreEqual(1, viewModel.SeriesCollection.Count);
             IList values = viewModel.SeriesCollection.First().ActualValues;

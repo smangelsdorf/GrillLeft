@@ -14,6 +14,7 @@ using static GrillLeft.Model.ThermometerState;
 namespace GrillLeft.ViewModel
 {
     using LiveCharts.Configurations;
+    using System.Collections.Specialized;
     using ThermometerChannelGroupedObserver = IGroupedObservable<ThermometerChannel, ThermometerState>;
 
     internal class TemperatureSeriesViewModel
@@ -91,6 +92,8 @@ namespace GrillLeft.ViewModel
                 Dispatcher.Invoke(() =>
                 {
                     var values = new AppendOnlyChartValues<AveragingDateTimePoint>(Mapper);
+                    INotifyCollectionChanged notifier = values;
+                    notifier.CollectionChanged += NewElementAdded;
 
                     var series = new LineSeries()
                     {
@@ -104,9 +107,12 @@ namespace GrillLeft.ViewModel
 
                     var subscription = AggregatePoints(observable).Subscribe(values);
                     Subscriptions.Add(subscription);
-
-                    Updater();
                 });
+            }
+
+            private void NewElementAdded(object sender, NotifyCollectionChangedEventArgs e)
+            {
+                Updater();
             }
 
             private IObservable<AveragingDateTimePoint> AggregatePoints(IObservable<ThermometerState> observable)
