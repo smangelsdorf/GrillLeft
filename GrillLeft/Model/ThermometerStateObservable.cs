@@ -45,7 +45,7 @@ namespace GrillLeft.Model
 
         internal void Emit(ThermometerState state)
         {
-            foreach (var subscriber in Subscribers.Values)
+            foreach (var subscriber in Subscribers.Values.ToList())
             {
                 subscriber.OnNext(state);
             }
