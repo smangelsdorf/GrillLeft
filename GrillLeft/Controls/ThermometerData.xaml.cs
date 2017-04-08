@@ -1,5 +1,6 @@
 ﻿using GrillLeft.Device;
 using GrillLeft.Model;
+using GrillLeft.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static GrillLeft.Model.ThermometerState;
 
 namespace GrillLeft
 {
@@ -22,26 +24,22 @@ namespace GrillLeft
     /// </summary>
     public partial class ThermometerData : UserControl
     {
-        private ThermometerState CurrentThermometerState;
+        internal ThermometerDataViewModel ViewModel;
 
-        internal ThermometerState ThermometerState
+        internal String ChannelHeading
         {
-            get
-            {
-                return CurrentThermometerState;
-            }
             set
             {
-                CurrentThermometerState = value;
-                Dispatcher.Invoke(() =>
-                {
-                    temperatureLabel.Content = value.TemperatureString;
-                });
+                this.channelLabel.Content = value;
             }
         }
 
         public ThermometerData()
         {
+            ViewModel = new ThermometerDataViewModel();
+
+            DataContext = ViewModel;
+
             InitializeComponent();
         }
     }

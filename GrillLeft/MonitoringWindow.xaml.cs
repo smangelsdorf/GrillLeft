@@ -40,11 +40,11 @@ namespace GrillLeft
                 switch (value.Channel)
                 {
                     case ThermometerState.ThermometerChannel.One:
-                        window.dataLeft.ThermometerState = value;
+                        window.dataLeft.ViewModel.ThermometerState = value;
                         break;
 
                     case ThermometerState.ThermometerChannel.Two:
-                        window.dataRight.ThermometerState = value;
+                        window.dataRight.ViewModel.ThermometerState = value;
                         break;
                 }
             }
@@ -68,6 +68,9 @@ namespace GrillLeft
         {
             InitializeComponent();
             this.connectionManager = new ConnectionManager();
+
+            this.dataLeft.ChannelHeading = "Channel One";
+            this.dataRight.ChannelHeading = "Channel Two";
         }
 
         internal GrillThermometer GrillThermometer

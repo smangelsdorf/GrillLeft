@@ -116,6 +116,7 @@
       <DependentUpon>ThermometerData.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\TemperatureSeriesViewModel.cs" />
+    <Compile Include="ViewModel\ThermometerDataViewModel.cs" />
     <Page Include="BluetoothDevicesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

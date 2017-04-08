@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GrillLeft"
         mc:Ignorable="d"
-        Title="MonitoringWindow" Height="400" Width="400">
+        Title="MonitoringWindow" Height="707.552" Width="884.753">
     <Grid>
-        <local:ThermometerData x:Name="dataLeft" Margin="10,10,200,200" />
-        <local:ThermometerData x:Name="dataRight" Margin="0,10,10,200" HorizontalAlignment="Right" Width="182" />
-        <local:TemperatureGraph x:Name="temperatureGraph" Margin="10,180,10,10" />
+        <local:ThermometerData x:Name="dataLeft" Margin="10,10,0,0" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" />
+        <local:ThermometerData x:Name="dataRight" Margin="225,10,0,0" Height="200" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" />
+        <local:TemperatureGraph x:Name="temperatureGraph" Margin="10,223,10.667,10.333" Grid.ColumnSpan="2" />
     </Grid>
 </Window>
