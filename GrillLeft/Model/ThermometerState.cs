@@ -18,8 +18,6 @@ namespace GrillLeft.Model
         internal readonly DateTime Time;
         internal readonly byte[] Data;
 
-        private readonly uint RawTemperature;
-
         internal ThermometerState(ThermometerChannel channel, byte[] bytes)
             : this(channel, bytes, DateTime.Now)
         {
@@ -29,19 +27,43 @@ namespace GrillLeft.Model
         {
             this.Channel = channel;
             this.Data = bytes;
-            this.RawTemperature = (((uint)bytes[13]) << 8) + ((uint)bytes[12]);
             this.Time = time;
         }
 
-        internal bool IsNullTemperature
+        private uint RawTemperatureFromBytes(byte high, byte low)
         {
-            get
+            return (((uint)high) << 8) + ((uint)low);
+        }
+
+        private String TemperatureStringFromRawTemperature(uint raw)
+        {
+            if (raw == 0x8FFF)
             {
-                return RawTemperature == 0x8FFF;
+                return "---";
+            }
+            else
+            {
+                return String.Format("{0:0.0}", raw / 10d);
             }
         }
 
-        internal double TemperatureValue
+        public uint RawTemperature
+        {
+            get
+            {
+                return RawTemperatureFromBytes(Data[13], Data[12]);
+            }
+        }
+
+        public uint RawTargetTemperature
+        {
+            get
+            {
+                return RawTemperatureFromBytes(Data[11], Data[10]);
+            }
+        }
+
+        public double TemperatureValue
         {
             get
             {
@@ -49,18 +71,28 @@ namespace GrillLeft.Model
             }
         }
 
-        internal String TemperatureString
+        public string TemperatureString
         {
             get
             {
-                if (IsNullTemperature)
-                {
-                    return "---";
-                }
-                else
-                {
-                    return String.Format("{0}", TemperatureValue);
-                }
+                return TemperatureStringFromRawTemperature(RawTemperature);
+            }
+        }
+
+        public string TargetTemperatureString
+        {
+            get
+            {
+                return TemperatureStringFromRawTemperature(RawTargetTemperature);
+            }
+        }
+
+        public string RawDataString
+        {
+            get
+            {
+                var components = Data.Select(b => String.Format("{0:X2}", b));
+                return String.Join(":", components.Take(8)) + "\r\n" + String.Join(":", components.Skip(8));
             }
         }
     }

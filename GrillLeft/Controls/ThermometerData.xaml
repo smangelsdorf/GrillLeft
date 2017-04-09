@@ -10,7 +10,8 @@
         <Border BorderBrush="Black" BorderThickness="1">
         </Border>
         <Label x:Name="channelLabel" Content="Channel" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="200" />
-        <Label x:Name="temperatureLabel" Content="{Binding TemperatureString}" Height="35" VerticalAlignment="Top" RenderTransformOrigin="0.509,-0.147" Margin="0,24,0,0" FontSize="16" />
+        <Label x:Name="temperatureLabel" Content="{Binding TemperatureString}" Height="35" VerticalAlignment="Top" RenderTransformOrigin="0.509,-0.147" Margin="0,25,0,0" FontSize="16" />
+        <Label x:Name="targetTemperatureLabel" Content="{Binding TargetTemperatureString}" Height="35" VerticalAlignment="Top" RenderTransformOrigin="0.509,-0.147" Margin="0,60,0,0" FontSize="16" />
         <Label x:Name="label" Content="{Binding RawDataString}" HorizontalAlignment="Left" Height="29" Margin="0,171,0,0" VerticalAlignment="Top" Width="200" FontSize="8" FontFamily="Consolas" />
     </Grid>
 </UserControl>

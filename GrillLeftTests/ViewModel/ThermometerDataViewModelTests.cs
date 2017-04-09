@@ -48,6 +48,39 @@ namespace GrillLeftTests.ViewModel
         }
 
         [TestMethod()]
+        public void TargetTemperatureStringTest()
+        {
+            var data = new byte[] {
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            };
+
+            var vm = new ThermometerDataViewModel();
+            vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
+
+            Assert.AreEqual("0.0", vm.TargetTemperatureString);
+
+            data[11] = 0x0A;
+            data[10] = 0x15;
+            vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
+
+            Assert.AreEqual("258.1", vm.TargetTemperatureString);
+
+            data[11] = 0x0C;
+            data[10] = 0x12;
+            vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
+
+            Assert.AreEqual("309.0", vm.TargetTemperatureString);
+
+            data[11] = 0x8F;
+            data[10] = 0xFF;
+            vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
+            Assert.AreEqual("---", vm.TargetTemperatureString);
+        }
+
+        [TestMethod()]
         public void RawDataStringTest()
         {
             var data = new byte[] {

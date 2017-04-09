@@ -36,43 +36,29 @@ namespace GrillLeft.ViewModel
             }
         }
 
-        public uint RawTemperature
-        {
-            get
-            {
-                var data = ThermometerState.Data;
-                return (((uint)data[13]) << 8) + ((uint)data[12]);
-            }
-        }
-
-        public double TemperatureValue
-        {
-            get
-            {
-                return ((double)RawTemperature) / 10d;
-            }
-        }
-
-        public bool IsNullTemperature
-        {
-            get
-            {
-                return ThermometerState == null || RawTemperature == 0x8FFF;
-            }
-        }
-
         public string TemperatureString
         {
             get
             {
-                if (IsNullTemperature)
+                if (ThermometerState == null)
                 {
                     return "---";
                 }
-                else
+
+                return ThermometerState.TemperatureString;
+            }
+        }
+
+        public string TargetTemperatureString
+        {
+            get
+            {
+                if (ThermometerState == null)
                 {
-                    return String.Format("{0:0.0}", TemperatureValue);
+                    return "Target: ---";
                 }
+
+                return $"Target: {ThermometerState.TargetTemperatureString}";
             }
         }
 
@@ -85,8 +71,7 @@ namespace GrillLeft.ViewModel
                     return "(no data yet)";
                 }
 
-                var components = ThermometerState.Data.Select(b => String.Format("{0:X2}", b));
-                return String.Join(":", components.Take(8)) + "\r\n" + String.Join(":", components.Skip(8));
+                return ThermometerState.RawDataString;
             }
         }
 
