@@ -15,18 +15,22 @@ namespace GrillLeft.ViewModel
 {
     using LiveCharts.Configurations;
     using System.Collections.Specialized;
+    using System.ComponentModel;
     using ThermometerChannelGroupedObserver = IGroupedObservable<ThermometerChannel, ThermometerState>;
 
-    internal class TemperatureSeriesViewModel
+    internal class TemperatureSeriesViewModel : INotifyPropertyChanged
     {
         private readonly SeriesCollection seriesCollection;
 
+        private List<PropertyChangedEventHandler> handlers;
         private IDisposable Subscription;
         private IDisposable ReleaseMax;
 
         internal TemperatureSeriesViewModel(Action<Action> dispatcher, Action updater)
         {
             seriesCollection = new SeriesCollection();
+            handlers = new List<PropertyChangedEventHandler>();
+
             Dispatcher = dispatcher;
             Updater = updater;
 
@@ -49,6 +53,10 @@ namespace GrillLeft.ViewModel
                         MaxTime = double.NaN;
                         ReleaseMax.Dispose();
                         Console.WriteLine("Exceeded max, dropped max");
+                        foreach (var handler in handlers)
+                        {
+                            handler.Invoke(this, new PropertyChangedEventArgs(""));
+                        }
                     }
                 });
             }
@@ -83,6 +91,19 @@ namespace GrillLeft.ViewModel
 
         internal Action<Action> Dispatcher { get; set; }
         internal Action Updater { get; set; }
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add
+            {
+                handlers.Add(value);
+            }
+
+            remove
+            {
+                handlers.Remove(value);
+            }
+        }
 
         private class ThermometerStateObserver : IObserver<ThermometerChannelGroupedObserver>
         {
