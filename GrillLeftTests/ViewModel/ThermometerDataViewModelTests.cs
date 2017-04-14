@@ -60,24 +60,24 @@ namespace GrillLeftTests.ViewModel
             var vm = new ThermometerDataViewModel();
             vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
 
-            Assert.AreEqual("0.0", vm.TargetTemperatureString);
+            Assert.AreEqual("Target: 0.0", vm.TargetTemperatureString);
 
             data[11] = 0x0A;
             data[10] = 0x15;
             vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
 
-            Assert.AreEqual("258.1", vm.TargetTemperatureString);
+            Assert.AreEqual("Target: 258.1", vm.TargetTemperatureString);
 
             data[11] = 0x0C;
             data[10] = 0x12;
             vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
 
-            Assert.AreEqual("309.0", vm.TargetTemperatureString);
+            Assert.AreEqual("Target: 309.0", vm.TargetTemperatureString);
 
             data[11] = 0x8F;
             data[10] = 0xFF;
             vm.ThermometerState = new ThermometerState(ThermometerChannel.One, (byte[])data.Clone());
-            Assert.AreEqual("---", vm.TargetTemperatureString);
+            Assert.AreEqual("Target: ---", vm.TargetTemperatureString);
         }
 
         [TestMethod()]
