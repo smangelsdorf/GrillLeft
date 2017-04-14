@@ -57,8 +57,8 @@ namespace GrillLeft.ViewModel.Tests
             Assert.AreEqual(states[0].TemperatureValue, ((AveragingDateTimePoint)values[0]).Value);
             Assert.AreEqual((states[1].TemperatureValue + states[2].TemperatureValue) / 2,
                             ((AveragingDateTimePoint)values[1]).Value);
-            Assert.AreEqual(t0, viewModel.MinTime, t0 / 1e6);
-            Assert.AreEqual(t2, viewModel.MaxTime, t2 / 1e6);
+            Assert.AreEqual(t0, viewModel.MinTime.Value, t0 / 1e6);
+            Assert.AreEqual(t2, viewModel.MaxTime.Value, t2 / 1e6);
         }
     }
 }

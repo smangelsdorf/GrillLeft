@@ -50,7 +50,7 @@ namespace GrillLeft.ViewModel
                 {
                     if (MaxTime < t.Time.Ticks)
                     {
-                        MaxTime = double.NaN;
+                        MaxTime = null;
                         ReleaseMax.Dispose();
                         Console.WriteLine("Exceeded max, dropped max");
                         foreach (var handler in handlers)
@@ -86,8 +86,12 @@ namespace GrillLeft.ViewModel
             }
         }
 
-        public double MinTime { get; private set; }
-        public double MaxTime { get; private set; }
+        // HACK: The nullable doubles here trigger an error when assigned to Axis.MinValue,
+        // but it has the intended effect anyway. I couldn't find a sensible way to do it,
+        // because the property itself is of type `double`.
+        public double? MinTime { get; private set; }
+
+        public double? MaxTime { get; private set; }
 
         internal Action<Action> Dispatcher { get; set; }
         internal Action Updater { get; set; }
