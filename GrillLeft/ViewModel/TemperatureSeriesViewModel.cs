@@ -137,6 +137,7 @@ namespace GrillLeft.ViewModel
                 AveragingDateTimePoint point = null;
 
                 return observable
+                    .Where(st => st.RawTemperature != 0x8FFF)
                     .Select(st => new AveragingDateTimePoint(st.Time, st.TemperatureValue))
                     .SelectMany(p =>
                     {
