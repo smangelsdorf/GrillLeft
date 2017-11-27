@@ -2,7 +2,7 @@
 
 A replacement for the official app for a Bluetooth grill thermometer.
 
-**Status:** Experimental but unmaintained. Stopped working after a Windows update mid-2017.
+**Status:** Experimental but unmaintained. Stopped working after a Windows update mid-2017.  
 **Platform:** Windows 7 or later  
 **License:** [MIT](https://opensource.org/licenses/MIT)
 
